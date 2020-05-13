@@ -1,3 +1,13 @@
+const admin = require('firebase-admin')
+const serviceAccount = require('../config.json')
+
+const init = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://beagle-71317.firebaseio.com',
+})
+
+const db = init.database()
+
 const errorHandler = async (message, statusCode, errors) => {
   let error = new Error(`${message}`)
   error.status = statusCode
@@ -23,6 +33,7 @@ const isRequiredField = async (obj, validate) => {
 }
 
 module.exports = {
+  db,
   errorHandler,
   isRequiredField,
 }
