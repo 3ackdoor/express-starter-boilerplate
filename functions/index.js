@@ -29,15 +29,15 @@ app.use(cors())
 app.use('/notification', notiRouter)
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(errorHandler('NotFound', 404))
+app.use(async (req, res, next) => {
+  next(await errorHandler('NotFound', 404))
 })
 // error handler
 app.use(async (err, req, res, next) => {
   console.log(err)
-  const { status, ...error } = err
-  res.status(err.status || 500)
-  res.send({ message: err.message || 'InternalError', statusCode: res.statusCode, ...error })
+  const { status, message, ...error } = err
+  res.status(status || 500)
+  res.send({ message: message || 'InternalError', statusCode: res.statusCode, ...error })
 })
 
 exports.app = functions.https.onRequest(app)
